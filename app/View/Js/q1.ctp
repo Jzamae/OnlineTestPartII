@@ -31,13 +31,6 @@ The table you start with</div>
 </thead>
 
 <tbody>
-	<tr>
-	<td></td>
-	<td><textarea name="data[1][description]" class="m-wrap  description required" rows="2" ></textarea></td>
-	<td><input name="data[1][quantity]" class=""></td>
-	<td><input name="data[1][unit_price]"  class=""></td>
-	
-</tr>
 
 </tbody>
 
@@ -64,14 +57,94 @@ Your browser does not support the video tag.
 <script>
 $(document).ready(function(){
 
-	$("#add_item_button").click(function(){
-
-
-		alert("suppose to add a new row");
+	$("#add_item_button").click(function(){	
 		
+		$.ajax({
+            dataType: "html",
+            type: "POST",
+            evalScripts: true,
+            url: 'q1',
+            data: ({action:'add_empty_value'}),
+            success: function (data){
+            	
+            	var r=$.parseJSON(data);
+            	var row_id = r['id'];
+				var description_name="data["+row_id+"][description]";
+				var quantity_name="data["+row_id+"][quantity]";
+				var unit_price_name="data["+row_id+"][unit_price]";
 
-		});
+				$("table tbody").append('<tr id='+row_id+'><td></td><td name='+description_name+'></td><td name='+quantity_name+'></td><td name='+unit_price_name+'></td></tr>');
+            }
+        });
 
+	});
+
+	$('table').on("click", "td", function(event) {
+	 var value=$(this).text();
+	 var td_name=$(this).attr('name');
+	 var is_contains_input=$(this).find('input').length;
+	 var is_contains_textarea=$(this).find('textarea').length;
+	 var tr_id=$(this).closest('tr').attr('id');
+
+	 if(td_name.indexOf("description") >= 0){
+	 	if(is_contains_textarea==0){
+	 		$(this).text('');
+	 		$(this).append('<textarea name='+td_name+' class="m-wrap  description required" rows="2" >'+value+'</textarea>');
+	 	}
+	 	if(is_contains_textarea==1 && !$(event.target).is('textarea')){
+	 		value=$('textarea[name="'+td_name+'"]').val();
+	 		$(this).find('textarea').remove();
+	 		$(this).text(value);
+	 		
+	 		var data=({action:'update',id:tr_id,field:'description',field_value:value});
+	 		update_ajax(data);
+	 	}
+	 	
+	 }
+
+	 if(td_name.indexOf("quantity") >= 0){
+	 	if(is_contains_input==0){
+	 		$(this).text('');
+	 		$(this).append('<input name='+td_name+' value='+value+'>');
+	 	}
+	 	if(is_contains_input==1 && !$(event.target).is('input')){
+	 		value=$('input[name="'+td_name+'"]').val();
+	 		$(this).find('input').remove();
+	 		$(this).text(value);
+
+	 		var data=({action:'update',id:tr_id,field:'quantity',field_value:value});
+	 		update_ajax(data);
+	 	}
+	 }
+
+	 if(td_name.indexOf("unit_price") >= 0){
+	 	if(is_contains_input==0){
+	 		$(this).text('');
+	 		$(this).append('<input name='+td_name+' value='+value+'>');
+	 	}
+	 	if(is_contains_input==1 && !$(event.target).is('input')){
+	 		value=$('input[name="'+td_name+'"]').val();
+	 		$(this).find('input').remove();
+	 		$(this).text(value);
+
+	 		var data=({action:'update',id:tr_id,field:'unit_price',field_value:value});
+	 		update_ajax(data);
+
+	 	}
+	 }
+   	});
+
+   	function update_ajax(data){
+   		$.ajax({
+	            dataType: "html",
+	            type: "POST",
+	            evalScripts: true,
+	            url: 'q1',
+	            data: data,
+	            success: function (data){
+	            }
+	        });
+   	}
 	
 });
 </script>

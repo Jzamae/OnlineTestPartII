@@ -166,7 +166,15 @@
  * or in each action using $this->cacheAction = true.
  *
  */
-	//Configure::write('Cache.check', true);
+	Configure::write('Cache.check', true);
+
+	Cache::config('short', array(
+	    'engine' => 'File',
+	    'duration'=> '+5 minutes',
+	    'probability'=> 100,
+	    'path' => CACHE,
+	    'prefix' => 'cache_short_'
+	));
 
 /**
  * Enable cache view prefixes.

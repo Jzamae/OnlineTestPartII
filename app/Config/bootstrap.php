@@ -112,3 +112,8 @@ CakeLog::config('error', array(
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 	'file' => 'error',
 ));
+
+/**
+ * Configure the autoloader
+ */
+App::import('Vendor', array('file' => 'autoload'));

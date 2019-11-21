@@ -6862,3 +6862,4 @@ CREATE TABLE `transaction_items` (
 INSERT INTO `transaction_items` (`id`, `transaction_id`, `description`, `quantity`, `unit_price`, `uom`, `sum`, `valid`, `created`, `modified`, `table`, `table_id`)
 VALUES
 	(1,1,'Being Payment for : \r\nRENEWAL2015 : 2015',1.00,100.00,NULL,100.00,1,'2015-06-02 18:00:00','2015-06-02 18:00:00','Member',1);
+GINE=InnoDB DEFAULT CHARSET=utf8;

@@ -11,27 +11,44 @@
 
 			$this->loadModel('Portion');
 			$portions = $this->Portion->find('all',array('conditions'=>array('Portion.valid'=>1),'recursive'=>2));
-			// debug($portions);exit;
+			//debug($portions);
 
-
+			
 			// To Do - write your own array in this format
-			$order_reports = array('Order 1' => array(
-										'Ingredient A' => 1,
-										'Ingredient B' => 12,
-										'Ingredient C' => 3,
-										'Ingredient G' => 5,
-										'Ingredient H' => 24,
-										'Ingredient J' => 22,
-										'Ingredient F' => 9,
-									),
-								  'Order 2' => array(
-								  		'Ingredient A' => 13,
-								  		'Ingredient B' => 2,
-								  		'Ingredient G' => 14,
-								  		'Ingredient I' => 2,
-								  		'Ingredient D' => 6,
-								  	),
-								);
+			$data_report=Array();
+			$ingredients=Array();
+			foreach($orders as $order)
+			{
+				$ingredients[$order['Order']['name']]=Array();
+				foreach($order['OrderDetail'] as $orderdetail)
+				{
+					foreach($portions as $portion)
+					{   
+						if($portion['Portion']['item_id']==$orderdetail['item_id']){
+							$ingredients[$order['Order']['name']][$portion['Portion']['item_id']]=Array();
+							foreach($portion['PortionDetail'] as $portiondetail)
+							{
+								$ingredients[$order['Order']['name']][$portion['Portion']['item_id']][$portiondetail['Part']['name']]=$portiondetail['value'];
+							}	
+						}				
+					}
+				}
+
+				$sum_ingredients = array();
+
+				foreach ($ingredients[$order['Order']['name']] as $k=>$subArray) {
+				  foreach ($subArray as $id=>$value) {
+				  	if( ! array_key_exists($id, $sum_ingredients)) $sum_ingredients[$id] = 0;
+				    $sum_ingredients[$id]+=$value;
+
+				  }
+				}
+
+				$details=array($order['Order']['name']=> $sum_ingredients);
+				$data_report=array_merge($data_report, $details);	
+			}
+			
+			$order_reports = $data_report;
 
 			// ...
 

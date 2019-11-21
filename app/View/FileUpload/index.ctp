@@ -13,8 +13,8 @@
 		<h3>Import Form</h3>
 	</div>
 <?php
-echo $this->Form->create('FileUpload');
-echo $this->Form->input('file', array('label' => 'File Upload', 'type' => 'file'));
+echo $this->Form->create('FileUpload',Array('type' => 'file'));
+echo $this->Form->input('file', array('label' => 'File Upload', 'type' => 'file','accept' => '.csv'));
 echo $this->Form->submit('Upload', array('class' => 'btn btn-primary'));
 echo $this->Form->end();
 ?>
